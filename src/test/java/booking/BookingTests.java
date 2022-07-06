@@ -4,24 +4,30 @@ import api.booking.BookingApi;
 import base.BaseTest;
 import models.booking.BookingModel;
 import models.booking.BookingResponse;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class BookingTests extends BaseTest {
     private final BookingApi bookingApi = new BookingApi();
 
-    @BeforeMethod
-    public void setUp() {
-        assignToken();
-    }
-
     @Test
-    public void createBookingTest() {
-        var payload = new BookingModel();
-        bookingApi.createBooking(payload);
-        bookingApi.verifyStatusCode();
+    public void crudBookingTest() {
+        response = bookingApi.createBooking(new BookingModel());
+        verifyResponseCode(200);
+        var bookingId = response.getBody().as(BookingResponse.class).getBookingId();
 
-        var booking = bookingApi.getBodyFromResponse(BookingResponse.class);
-        System.out.println(booking.getBookingId());
+        response = bookingApi.getBooking(bookingId);
+        verifyResponseCode(200);
+
+        response = bookingApi.updateBooking(bookingId, new BookingModel());
+        verifyResponseCode(200);
+
+        response = bookingApi.getBooking(bookingId);
+        verifyResponseCode(200);
+
+        response = bookingApi.deleteBooking(bookingId);
+        verifyResponseCode(201);
+
+        response = bookingApi.getBooking(bookingId);
+        verifyResponseCode(404);
     }
 }

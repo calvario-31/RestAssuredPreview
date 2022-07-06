@@ -1,16 +1,16 @@
 package api.auth;
 
 import base.BaseApi;
+import io.restassured.response.Response;
 import models.auth.LoginModel;
 
 public class LoginApi extends BaseApi {
-    public LoginApi() {
-        super("auth");
-    }
+    private final String path = "auth";
 
-    public void login(LoginModel loginModel) {
-        log.info("login POST");
+    public Response login(LoginModel loginModel) {
+        log.info("Login POST");
+        setBasePath(path);
         setRequestBody(loginModel);
-        apiCallManager(POST, 200);
+        return apiCallManager(POST);
     }
 }

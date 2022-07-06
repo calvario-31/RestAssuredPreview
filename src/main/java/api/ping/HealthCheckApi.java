@@ -1,15 +1,14 @@
 package api.ping;
 
 import base.BaseApi;
+import io.restassured.response.Response;
 
 public class HealthCheckApi extends BaseApi {
+    private final String path = "ping";
 
-    public HealthCheckApi() {
-        super("ping");
-    }
-
-    public void healthCheck() {
-        log.info("health check GET");
-        apiCallManager(GET, 201);
+    public Response healthCheck() {
+        log.info("Health Check GET");
+        setBasePath(path);
+        return apiCallManager(GET);
     }
 }

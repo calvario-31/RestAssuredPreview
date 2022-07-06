@@ -1,8 +1,8 @@
 package base;
 
+import io.restassured.response.Response;
 import utilities.Logs;
 import utilities.managers.RequestManager;
-import utilities.managers.ResponseManager;
 
 public abstract class BaseApi {
     protected final String GET = "GET";
@@ -12,32 +12,21 @@ public abstract class BaseApi {
     protected final String DELETE = "DELETE";
 
     private final RequestManager requestManager;
-    protected ResponseManager responseManager;
     protected Logs log = new Logs();
 
-    public BaseApi(String apiUrl) {
-        requestManager = new RequestManager(apiUrl);
+    public BaseApi() {
+        requestManager = new RequestManager();
     }
 
-    public BaseApi(String apiUrl, String token) {
-        this(apiUrl);
-        requestManager.setToken(token);
-    }
-
-    protected void apiCallManager(String method, int expectedStatusCode) {
-        var response = requestManager.callApi(method);
-        responseManager = new ResponseManager(response, expectedStatusCode);
+    protected Response apiCallManager(String method) {
+        return requestManager.callApi(method);
     }
 
     protected void setRequestBody(BaseModel model) {
         requestManager.setRequestBody(model);
     }
 
-    public void verifyStatusCode() {
-        responseManager.verifyStatusCode();
-    }
-
-    public <T> T getBodyFromResponse(Class<T> clazz) {
-        return responseManager.getBodyFromResponse(clazz);
+    protected void setBasePath(String value) {
+        requestManager.setBasePath(value);
     }
 }

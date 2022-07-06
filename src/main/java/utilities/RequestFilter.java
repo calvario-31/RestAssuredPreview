@@ -15,8 +15,8 @@ public class RequestFilter extends RequestLoggingFilter {
                            FilterContext ctx) {
         var response = ctx.next(requestSpec, responseSpec);
 
-        var token = requestSpec.getHeaders().getValue("Basic");
-        
+        var token = requestSpec.getHeaders().getValue("Authorization");
+
         if (token == null) {
             token = "--";
         }

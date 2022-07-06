@@ -9,7 +9,7 @@ public class HealthCheckTests extends BaseTest {
 
     @Test
     public void healthCheckTest() {
-        healthCheckAPI.healthCheck();
-        healthCheckAPI.verifyStatusCode();
+        response = healthCheckAPI.healthCheck();
+        verifyResponseCode(201);
     }
 }

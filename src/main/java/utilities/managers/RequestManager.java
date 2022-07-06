@@ -2,6 +2,7 @@ package utilities.managers;
 
 import base.BaseModel;
 import io.restassured.RestAssured;
+import io.restassured.authentication.PreemptiveBasicAuthScheme;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -14,33 +15,37 @@ public class RequestManager {
     private final String mainUrl = "https://restful-booker.herokuapp.com";
     protected Logs log = new Logs();
 
-    public RequestManager(String apiUrl) {
-        request = buildRequestSpec(apiUrl);
+    public RequestManager() {
+        request = buildRequestSpec();
     }
 
-    public RequestSpecification buildRequestSpec(String apiUrl) {
+    public RequestSpecification buildRequestSpec() {
+        var authScheme = new PreemptiveBasicAuthScheme();
+        authScheme.setUserName("admin");
+        authScheme.setPassword("password123");
+
         var spec = RestAssured.requestSpecification =
                 new RequestSpecBuilder().
                         setBaseUri(mainUrl).
-                        setBasePath(apiUrl).
+                        setAuth(authScheme).
                         setContentType(ContentType.JSON).
                         build();
 
         return RestAssured.given().spec(spec).filter(new RequestFilter());
     }
 
-    public void setToken(String token) {
-        log.info("Setting token");
-        request.header("Basic", token);
-    }
-
     public void setRequestBody(BaseModel model) {
-        log.info("Setting request body");
+        log.debug("Setting request body");
         request.body(model);
     }
 
+    public void setBasePath(String value) {
+        log.debug("Setting base path: " + value);
+        request.basePath(value);
+    }
+
     public Response callApi(String method) {
-        log.info("Calling api " + method);
+        log.debug("Calling api with method " + method);
         return request.request(method);
     }
 }
