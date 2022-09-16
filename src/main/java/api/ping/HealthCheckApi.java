@@ -7,8 +7,8 @@ public class HealthCheckApi extends BaseApi {
     private final String path = "ping";
 
     public Response healthCheck() {
-        log.info("Health Check GET");
-        setBasePath(path);
+        logs.info("Health Check GET");
+        setRequestData(path);
         return apiCallManager(GET);
     }
 }

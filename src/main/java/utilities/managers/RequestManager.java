@@ -13,7 +13,7 @@ import utilities.RequestFilter;
 public class RequestManager {
     private final RequestSpecification request;
     private final String mainUrl = "https://restful-booker.herokuapp.com";
-    protected Logs log = new Logs();
+    private final Logs logs = new Logs();
 
     public RequestManager() {
         request = buildRequestSpec();
@@ -25,27 +25,27 @@ public class RequestManager {
         authScheme.setPassword("password123");
 
         var spec = RestAssured.requestSpecification =
-                new RequestSpecBuilder().
-                        setBaseUri(mainUrl).
-                        setAuth(authScheme).
-                        setContentType(ContentType.JSON).
-                        build();
+                new RequestSpecBuilder()
+                        .setBaseUri(mainUrl)
+                        .setAuth(authScheme)
+                        .setContentType(ContentType.JSON)
+                        .build();
 
         return RestAssured.given().spec(spec).filter(new RequestFilter());
     }
 
     public void setRequestBody(BaseModel model) {
-        log.debug("Setting request body");
+        logs.debug("Setting request body");
         request.body(model);
     }
 
     public void setBasePath(String value) {
-        log.debug("Setting base path: " + value);
+        logs.debug("Setting base path: " + value);
         request.basePath(value);
     }
 
     public Response callApi(String method) {
-        log.debug("Calling api with method " + method);
+        logs.debug("Calling api with method " + method);
         return request.request(method);
     }
 }

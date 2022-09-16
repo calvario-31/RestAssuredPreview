@@ -8,9 +8,8 @@ public class LoginApi extends BaseApi {
     private final String path = "auth";
 
     public Response login(LoginModel loginModel) {
-        log.info("Login POST");
-        setBasePath(path);
-        setRequestBody(loginModel);
+        logs.info("Login POST");
+        setRequestData(path, loginModel);
         return apiCallManager(POST);
     }
 }

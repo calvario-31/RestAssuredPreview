@@ -3,6 +3,7 @@ package api.booking;
 import base.BaseApi;
 import io.restassured.response.Response;
 import models.booking.BookingModel;
+import models.booking.BookingPartialModel;
 
 public class BookingApi extends BaseApi {
     private final String path = "booking";
@@ -12,28 +13,32 @@ public class BookingApi extends BaseApi {
     }
 
     public Response createBooking(BookingModel bookingModel) {
-        log.info("Booking POST");
-        setBasePath(path);
-        setRequestBody(bookingModel);
+        logs.info("Booking POST");
+        setRequestData(path, bookingModel);
         return apiCallManager(POST);
     }
 
     public Response getBooking(int bookingId) {
-        log.info("Booking GET");
-        setBasePath(getPathById(bookingId));
+        logs.info("Booking GET");
+        setRequestData(getPathById(bookingId));
         return apiCallManager(GET);
     }
 
     public Response updateBooking(int bookingId, BookingModel bookingModel) {
-        log.info("Booking PUT");
-        setBasePath(getPathById(bookingId));
-        setRequestBody(bookingModel);
+        logs.info("Booking PUT");
+        setRequestData(getPathById(bookingId), bookingModel);
         return apiCallManager(PUT);
     }
 
+    public Response partialUpdateBooking(int bookingId, BookingPartialModel bookingModel) {
+        logs.info("Booking PATCH");
+        setRequestData(getPathById(bookingId), bookingModel);
+        return apiCallManager(PATCH);
+    }
+
     public Response deleteBooking(int bookingId) {
-        log.info("Booking DELETE");
-        setBasePath(getPathById(bookingId));
+        logs.info("Booking DELETE");
+        setRequestData(getPathById(bookingId));
         return apiCallManager(DELETE);
     }
 }

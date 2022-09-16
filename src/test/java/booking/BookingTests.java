@@ -2,32 +2,69 @@ package booking;
 
 import api.booking.BookingApi;
 import base.BaseTest;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import models.booking.BookingModel;
+import models.booking.BookingPartialModel;
 import models.booking.BookingResponse;
 import org.testng.annotations.Test;
 
 public class BookingTests extends BaseTest {
     private final BookingApi bookingApi = new BookingApi();
+    private final String bookingResponseSchema = "booking/BookingResponse.json";
+    private final String bookingModelSchema = "booking/BookingModel.json";
 
     @Test
     public void crudBookingTest() {
-        response = bookingApi.createBooking(new BookingModel());
-        verifyResponseCode(200);
-        var bookingId = response.getBody().as(BookingResponse.class).getBookingId();
+        var bookingModel = new BookingModel();
 
-        response = bookingApi.getBooking(bookingId);
-        verifyResponseCode(200);
+        //CREATE
+        var bookingId = bookingApi.createBooking(bookingModel).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingResponseSchema)))
+                .extract().body().as(BookingResponse.class).getBookingId();
 
-        response = bookingApi.updateBooking(bookingId, new BookingModel());
-        verifyResponseCode(200);
+        //GET
+        bookingApi.getBooking(bookingId).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
 
-        response = bookingApi.getBooking(bookingId);
-        verifyResponseCode(200);
+        //UPDATE
+        bookingModel = new BookingModel();
+        bookingApi.updateBooking(bookingId, bookingModel).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
 
-        response = bookingApi.deleteBooking(bookingId);
-        verifyResponseCode(201);
+        //GET
+        bookingApi.getBooking(bookingId).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)))
+                .extract().body().as(BookingModel.class);
 
-        response = bookingApi.getBooking(bookingId);
-        verifyResponseCode(404);
+        //PARTIAL UPDATE
+        var partialBookingModel = new BookingPartialModel();
+        bookingApi.partialUpdateBooking(bookingId, partialBookingModel).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+
+        //GET
+        bookingApi.getBooking(bookingId).then()
+                .assertThat()
+                .statusCode(200)
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+
+        //DELETE
+        bookingApi.deleteBooking(bookingId).then()
+                .assertThat()
+                .statusCode(201);
+
+        //GET
+        bookingApi.getBooking(bookingId).then()
+                .assertThat()
+                .statusCode(404);
     }
 }

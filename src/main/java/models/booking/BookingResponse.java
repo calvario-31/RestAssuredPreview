@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BookingResponse extends BaseModel {
     @JsonProperty("bookingid")
     private int bookingId;
+    @JsonProperty("booking")
     private BookingModel booking;
 
     public int getBookingId() {

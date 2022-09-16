@@ -5,16 +5,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javafaker.Faker;
 
 public class BookingModel extends BaseModel {
-    private final String firstname;
-    private final String lastname;
+    @JsonProperty("firstname")
+    private String firstname;
+    @JsonProperty("lastname")
+    private String lastname;
     @JsonProperty("totalprice")
-    private final int totalPrice;
+    private int totalPrice;
     @JsonProperty("depositpaid")
-    private final boolean paid;
+    private boolean paid;
     @JsonProperty("additionalneeds")
-    private final String additionalNeeds;
+    private String additionalNeeds;
     @JsonProperty("bookingdates")
-    private final BookingDates bookingDates;
+    private BookingDates bookingDates;
 
     public BookingModel() {
         var faker = new Faker();
@@ -24,6 +26,30 @@ public class BookingModel extends BaseModel {
         paid = faker.bool().bool();
         additionalNeeds = faker.animal().name();
         bookingDates = new BookingDates();
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
+
+    public void setAdditionalNeeds(String additionalNeeds) {
+        this.additionalNeeds = additionalNeeds;
+    }
+
+    public void setBookingDates(BookingDates bookingDates) {
+        this.bookingDates = bookingDates;
     }
 
     public String getFirstname() {
