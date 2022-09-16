@@ -3,13 +3,14 @@ package models.auth;
 import base.BaseModel;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LoginModel extends BaseModel {
+public class LoginRequest extends BaseModel {
+    public final static String loginResponseSchema = "login/LoginResponse.json";
     @JsonProperty("username")
     private final String username;
     @JsonProperty("password")
     private final String password;
 
-    public LoginModel(String username, String password) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }

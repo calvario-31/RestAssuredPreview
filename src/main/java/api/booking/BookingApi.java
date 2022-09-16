@@ -2,8 +2,8 @@ package api.booking;
 
 import base.BaseApi;
 import io.restassured.response.Response;
-import models.booking.BookingModel;
-import models.booking.BookingPartialModel;
+import models.booking.Booking;
+import models.booking.BookingPartial;
 
 public class BookingApi extends BaseApi {
     private final String path = "booking";
@@ -12,9 +12,9 @@ public class BookingApi extends BaseApi {
         return String.format("%s/%d", path, bookingId);
     }
 
-    public Response createBooking(BookingModel bookingModel) {
+    public Response createBooking(Booking booking) {
         logs.info("Booking POST");
-        setRequestData(path, bookingModel);
+        setRequestData(path, booking);
         return apiCallManager(POST);
     }
 
@@ -24,13 +24,13 @@ public class BookingApi extends BaseApi {
         return apiCallManager(GET);
     }
 
-    public Response updateBooking(int bookingId, BookingModel bookingModel) {
+    public Response updateBooking(int bookingId, Booking booking) {
         logs.info("Booking PUT");
-        setRequestData(getPathById(bookingId), bookingModel);
+        setRequestData(getPathById(bookingId), booking);
         return apiCallManager(PUT);
     }
 
-    public Response partialUpdateBooking(int bookingId, BookingPartialModel bookingModel) {
+    public Response partialUpdateBooking(int bookingId, BookingPartial bookingModel) {
         logs.info("Booking PATCH");
         setRequestData(getPathById(bookingId), bookingModel);
         return apiCallManager(PATCH);

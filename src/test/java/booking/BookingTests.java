@@ -3,59 +3,61 @@ package booking;
 import api.booking.BookingApi;
 import base.BaseTest;
 import io.restassured.module.jsv.JsonSchemaValidator;
-import models.booking.BookingModel;
-import models.booking.BookingPartialModel;
+import models.booking.Booking;
+import models.booking.BookingPartial;
 import models.booking.BookingResponse;
 import org.testng.annotations.Test;
 
 public class BookingTests extends BaseTest {
     private final BookingApi bookingApi = new BookingApi();
-    private final String bookingResponseSchema = "booking/BookingResponse.json";
-    private final String bookingModelSchema = "booking/BookingModel.json";
 
     @Test
     public void crudBookingTest() {
-        var bookingModel = new BookingModel();
-
+        var bookingModel = new Booking();
         //CREATE
         var bookingId = bookingApi.createBooking(bookingModel).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingResponseSchema)))
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(BookingResponse.schemaPath)))
                 .extract().body().as(BookingResponse.class).getBookingId();
 
         //GET
         bookingApi.getBooking(bookingId).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(Booking.schemaPath)))
+                .extract().body().as(Booking.class)
+                .isEqualsTo(bookingModel);
 
         //UPDATE
-        bookingModel = new BookingModel();
+        bookingModel = new Booking();
         bookingApi.updateBooking(bookingId, bookingModel).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(Booking.schemaPath)));
 
         //GET
         bookingApi.getBooking(bookingId).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)))
-                .extract().body().as(BookingModel.class);
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(Booking.schemaPath)))
+                .extract().body().as(Booking.class)
+                .isEqualsTo(bookingModel);
 
         //PARTIAL UPDATE
-        var partialBookingModel = new BookingPartialModel();
+        var partialBookingModel = new BookingPartial();
         bookingApi.partialUpdateBooking(bookingId, partialBookingModel).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(Booking.schemaPath)));
 
         //GET
         bookingApi.getBooking(bookingId).then()
                 .assertThat()
                 .statusCode(200)
-                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(bookingModelSchema)));
+                .body(JsonSchemaValidator.matchesJsonSchema(getSchema(Booking.schemaPath)))
+                .extract().body().as(Booking.class)
+                .isEqualsTo(partialBookingModel);
 
         //DELETE
         bookingApi.deleteBooking(bookingId).then()

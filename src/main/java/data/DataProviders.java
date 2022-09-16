@@ -1,9 +1,9 @@
 package data;
 
-import models.auth.LoginModel;
+import models.auth.LoginRequest;
 
 public class DataProviders {
-    public LoginModel getValidUser() {
-        return new LoginModel("admin", "password123");
+    public LoginRequest getValidUser() {
+        return new LoginRequest("admin", "password123");
     }
 }
