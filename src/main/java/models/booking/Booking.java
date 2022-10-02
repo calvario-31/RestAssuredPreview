@@ -30,7 +30,7 @@ public class Booking extends BaseModel {
         bookingDates = new BookingDates();
     }
 
-    public void isEqualsTo(Booking booking) {
+    public Booking isEqualsTo(Booking booking) {
         var softAssert = new SoftAssert();
         softAssert.assertEquals(booking.getFirstname(), firstname);
         softAssert.assertEquals(booking.getLastname(), lastname);
@@ -39,6 +39,7 @@ public class Booking extends BaseModel {
         softAssert.assertEquals(booking.getBookingDates().getCheckIn(), bookingDates.getCheckIn());
         softAssert.assertEquals(booking.getBookingDates().getCheckOut(), bookingDates.getCheckOut());
         softAssert.assertAll();
+        return this;
     }
 
     public void isEqualsTo(BookingPartial bookingModel) {

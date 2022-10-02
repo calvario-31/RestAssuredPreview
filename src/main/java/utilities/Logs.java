@@ -14,7 +14,7 @@ public class Logs {
         log = LogManager.getLogger(tag);
     }
 
-    private void printTestSeparator() {
+    public void printTestSeparator() {
         log.info(bigSeparator);
     }
 
@@ -22,7 +22,7 @@ public class Logs {
         log.info(smallSeparator);
     }
 
-    private void printSeparatorDebug() {
+    public void printSeparatorDebug() {
         log.debug(smallSeparator);
     }
 
@@ -90,27 +90,5 @@ public class Logs {
 
     public void debug(String message) {
         log.debug(message);
-    }
-
-    public void printRequest(String url, String method, String contentType, String token, String payload,
-                             int statusCode, long time, String responseBody) {
-        var newLine = System.lineSeparator();
-        var stringBuilder = new StringBuilder();
-        stringBuilder
-                .append(newLine).append(newLine)
-                .append("Request:").append(newLine)
-                .append("-------").append(newLine)
-                .append("URL:\t\t\t").append(url).append(newLine)
-                .append("Method:\t\t\t").append(method).append(newLine)
-                .append("Content-Type:   ").append(contentType).append(newLine)
-                .append("Authorization:\t").append(token).append(newLine)
-                .append("Payload: ").append(newLine).append(payload).append(newLine).append(newLine)
-                .append("Response:").append(newLine)
-                .append("--------").append(newLine)
-                .append("Status Code:\t").append(statusCode).append(newLine)
-                .append("Response Time:\t").append(time).append(" ms").append(newLine)
-                .append("Response Body:").append(newLine).append(responseBody).append(newLine);
-        
-        log.debug(stringBuilder);
     }
 }

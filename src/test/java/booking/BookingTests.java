@@ -6,10 +6,16 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import models.booking.Booking;
 import models.booking.BookingPartial;
 import models.booking.BookingResponse;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class BookingTests extends BaseTest {
     private final BookingApi bookingApi = new BookingApi();
+
+    @BeforeMethod
+    public void setup() {
+        bookingApi.setAuth(false);
+    }
 
     @Test
     public void crudBookingTest() {
